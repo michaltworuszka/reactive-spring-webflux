@@ -2,7 +2,10 @@ package com.learnreactiveprogramming.service;
 
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.List;
 
 class FluxAndMonoGeneratorServiceTest {
 
@@ -71,5 +74,88 @@ class FluxAndMonoGeneratorServiceTest {
         StepVerifier.create(namesFlux_flatMapped)
                 .expectNext("M","I","K","E","Y","M","Y","K","O","L","A")
                 .verifyComplete();
+    }
+
+    @Test
+    void namesFlux_flatMapAsync() {
+        //given
+        int stringLength = 4;
+
+        //when
+        Flux<String> namesFlux_flatMappedAsync = fluxAndMonoGeneratorService.namesFlux_flatMapAsync(stringLength);
+
+        //then
+        StepVerifier.create(namesFlux_flatMappedAsync)
+                .expectNextCount(11)
+                .verifyComplete();
+
+//        StepVerifier.create(namesFlux_flatMappedAsync)
+//                .expectNext("M","I","K","E","Y","M","Y","K","O","L","A") // this will not work with async - at this point
+//                .verifyComplete();
+    }
+
+    @Test
+    void namesFlux_concatMap() { //use concatMap if ordering matters
+        //given
+        int stringLength = 4;
+
+        //when
+        Flux<String> namesFlux_concatMap = fluxAndMonoGeneratorService.namesFlux_concatMap(stringLength);
+
+        //then
+        StepVerifier.create(namesFlux_concatMap)
+                .expectNextCount(11)
+                .verifyComplete();
+
+        StepVerifier.create(namesFlux_concatMap)
+                .expectNext("M","I","K","E","Y","M","Y","K","O","L","A")
+                .verifyComplete();
+    }
+
+    @Test
+    void namesMono_flatMap() {
+        //given
+        int stringLength = 4;
+
+        //when
+        Mono<List<String>> listMono = fluxAndMonoGeneratorService.namesMono_flatMap(stringLength);
+
+        //then
+        StepVerifier.create(listMono)
+                .expectNext(List.of("M","I","K","E","Y"))
+                .verifyComplete();
+    }
+
+    @Test
+    void namesMono_flatMapMany() {
+        //given
+        int stringLength = 4;
+
+        //when
+        Flux<String> listMono = fluxAndMonoGeneratorService.namesMono_flatMapMany(stringLength);
+
+        //then
+        StepVerifier.create(listMono)
+                .expectNext("M","I","K","E","Y")
+                .verifyComplete();
+    }
+
+    @Test
+    void namesFlux_transform() {
+        //given
+        int stringLength = 4;
+
+        //when
+        Flux<String> namesFlux_transformed = fluxAndMonoGeneratorService.namesFlux_transform(stringLength);
+
+        //then
+        StepVerifier.create(namesFlux_transformed)
+                .expectNextCount(11)
+                .verifyComplete();
+
+        StepVerifier.create(namesFlux_transformed)
+                .expectNext("M","I","K","E","Y","M","Y","K","O","L","A")
+                .verifyComplete();
+
     }
 }
