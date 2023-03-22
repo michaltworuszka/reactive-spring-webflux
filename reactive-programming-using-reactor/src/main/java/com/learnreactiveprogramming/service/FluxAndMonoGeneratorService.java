@@ -89,8 +89,23 @@ public class FluxAndMonoGeneratorService {
 
         return Flux.fromIterable(List.of("mikey", "mykola", "kris"))
                 .transform(filterMap)
-                //MIKEY, MYKOLA -> M,I,K,E,Y,M,Y,K,O,L,A
-                .flatMap(this::splitString)
+                .flatMap(this::splitString) //MIKEY, MYKOLA -> M,I,K,E,Y,M,Y,K,O,L,A
+                .defaultIfEmpty("default")
+                .log();
+    }
+
+    public Flux<String> namesFlux_transform_switchIfEmpty(int stringLength) {
+
+        Function<Flux<String>, Flux<String>> filterMap = name -> name.map(String::toUpperCase) // used to get functionality out of reactive stream and reuse it
+                .filter(string -> string.length() > stringLength)
+                .flatMap(this::splitString);
+
+        Flux<String> defaultFlux = Flux.just("default")
+                .transform(filterMap); //will return "D","E","F","A","U","L","T"
+
+        return Flux.fromIterable(List.of("mikey", "mykola", "kris"))
+                .transform(filterMap)
+                .switchIfEmpty(defaultFlux)
                 .log();
     }
 
