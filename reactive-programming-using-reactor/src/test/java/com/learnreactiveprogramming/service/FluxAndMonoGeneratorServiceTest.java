@@ -283,4 +283,19 @@ class FluxAndMonoGeneratorServiceTest {
                 .expectNext("A", "D")
                 .verifyComplete();
     }
+
+    @Test
+    void exploreWithMergerSequential() {
+        //given
+
+        //when
+        Flux<String> exploreMergeSequential = fluxAndMonoGeneratorService.exploreMergeSequential();
+
+        //then
+        StepVerifier.create(exploreMergeSequential)
+                .expectSubscription()
+                .expectNext("A", "B", "C", "D", "E", "F")
+                .verifyComplete();
+
+    }
 }

@@ -139,7 +139,7 @@ public class FluxAndMonoGeneratorService {
 
 
     // **********************  concat  **********************
-    // with concats subscribers (Flux, Mono) are subscribe in sequence. when one finishes then second "starts".
+    // with concats publishers (Flux, Mono) are subscribed in sequence. when one finishes then second "starts".
 
     public Flux<String> exploreConcat(){
 
@@ -169,7 +169,7 @@ public class FluxAndMonoGeneratorService {
     }
 
     // **********************  merge  **********************
-    // in merges subscribers are subscrife eagerly ("at the same time") and merge happens in an interleaved fashion
+    // in merges publishers are subscribed eagerly ("at the same time") and merge happens in an interleaved fashion
 
     public Flux<String> exploreMerge(){
 
@@ -206,6 +206,18 @@ public class FluxAndMonoGeneratorService {
     }
 
     // **********************  mergeSequential  **********************
+    //Even though the publishers are subscribed eagerly the merge happens in a sequence (this is like concat + merge)
+
+    public Flux<String> exploreMergeSequential(){
+        Flux<String> abcFlux = Flux.just("A", "B", "C")
+                .delayElements(Duration.ofMillis(100));
+
+        Flux<String> defFlux = Flux.just("D", "E", "F")
+                .delayElements(Duration.ofMillis(125));
+
+        return Flux.mergeSequential(abcFlux,defFlux).log();
+
+    }
 
 
 
