@@ -219,6 +219,52 @@ public class FluxAndMonoGeneratorService {
 
     }
 
+    // **********************  zip/zipWith  **********************
+    //Zip is used to zip(merge) multiple publishers together into one. Zip takes min 3 arguments. The first two (up-to 8) are the source fluxes and the third (last)
+    // is the Combinator Lambda - here we can make logic to how zip/merge those flux. Zip can merge up-to 2 to 8 Publishers (Flux or Mono) in to one
+    //zipWith is to zip 2 publishers into 1.
+    //Publishers are subscribed eagerly
+
+    public Flux<String> exploreZip() {
+        Flux<String> abcFlux = Flux.just("A", "B", "C");
+
+        Flux<String> defFlux = Flux.just("D", "E", "F");
+
+        return Flux.zip(abcFlux,defFlux, (first, second) -> first + second).log(); //AD, BE, CF
+
+    }
+
+    public Flux<String> exploreZip4Flux() {
+        Flux<String> abcFlux = Flux.just("A", "B", "C");
+
+        Flux<String> defFlux = Flux.just("D", "E", "F");
+        Flux<String> _123Flux = Flux.just("1", "2", "3");
+        Flux<String> _456Flux = Flux.just("4", "5", "6");
+
+        return Flux.zip(abcFlux,defFlux, _123Flux,_456Flux).map(tuple4 -> tuple4.getT1()
+                + tuple4.getT2() + tuple4.getT3() + tuple4.getT4()).log(); //AD14, BE25, CF36
+
+    }
+
+    public Flux<String> exploreZipWith() {
+        Flux<String> abcFlux = Flux.just("A", "B", "C");
+
+        Flux<String> defFlux = Flux.just("D", "E", "F");
+
+        return abcFlux.zipWith(defFlux, (first, second) -> first + second).log(); //AD, BE, CF
+
+    }
+
+    public Mono<String> exploreZipWithMono(){
+
+        Mono<String> aMono = Mono.just("A");
+
+        Mono<String> dMono = Mono.just("D");
+
+        //return aMono.zipWith(dMono,(first, second) -> first + second).log(); - one way
+        return aMono.zipWith(dMono).map(tuple2 -> tuple2.getT1() + tuple2.getT2()).log(); //second way
+
+    }
 
 
     // **********************  MAIN  **********************

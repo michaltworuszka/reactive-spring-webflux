@@ -298,4 +298,60 @@ class FluxAndMonoGeneratorServiceTest {
                 .verifyComplete();
 
     }
+
+    @Test
+    void exploreZip() {
+        //given
+
+        //when
+        Flux<String> exploreZip = fluxAndMonoGeneratorService.exploreZip();
+
+        //then
+        StepVerifier.create(exploreZip)
+                .expectSubscription()
+                .expectNext("AD", "BE", "CF")
+                .verifyComplete();
+    }
+
+    @Test
+    void exploreZip4Flux() {
+        //given
+
+        //when
+        Flux<String> exploreZip = fluxAndMonoGeneratorService.exploreZip4Flux();
+
+        //then
+        StepVerifier.create(exploreZip)
+                .expectSubscription()
+                .expectNext("AD14", "BE25", "CF36")
+                .verifyComplete();
+    }
+
+    @Test
+    void exploreZipWith() {
+        //given
+
+        //when
+        Flux<String> exploreZipWith = fluxAndMonoGeneratorService.exploreZipWith();
+
+        //then
+        StepVerifier.create(exploreZipWith)
+                .expectSubscription()
+                .expectNext("AD", "BE", "CF")
+                .verifyComplete();
+    }
+
+    @Test
+    void exploreZipWithMono() {
+        //given
+
+        //when
+        Mono<String> exploreZipWithMono = fluxAndMonoGeneratorService.exploreZipWithMono();
+
+        //then
+        StepVerifier.create(exploreZipWithMono)
+                .expectSubscription()
+                .expectNext("AD")
+                .verifyComplete();
+    }
 }
