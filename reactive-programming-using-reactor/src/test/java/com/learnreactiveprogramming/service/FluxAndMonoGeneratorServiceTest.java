@@ -198,4 +198,46 @@ class FluxAndMonoGeneratorServiceTest {
                 .verifyComplete();
 
     }
+
+    @Test
+    void exploreConcat() {
+        //given
+
+        //when
+        Flux<String> exploreConcat = fluxAndMonoGeneratorService.exploreConcat();
+
+        //then
+        StepVerifier.create(exploreConcat)
+                .expectSubscription()
+                .expectNext("A", "B", "C", "D", "E", "F")
+                .verifyComplete();
+    }
+
+    @Test
+    void exploreConcatWith() {
+        //given
+
+        //when
+        Flux<String> exploreConcatWith = fluxAndMonoGeneratorService.exploreConcatWith();
+
+        //then
+        StepVerifier.create(exploreConcatWith)
+                .expectSubscription()
+                .expectNext("A", "B", "C", "D", "E", "F")
+                .verifyComplete();
+    }
+
+    @Test
+    void exploreConcatWith_mono() {
+        //given
+
+        //when
+        Flux<String> exploreConcatWith_mono = fluxAndMonoGeneratorService.exploreConcatWith_mono();
+
+        //then
+        StepVerifier.create(exploreConcatWith_mono)
+                .expectSubscription()
+                .expectNext("A", "B")
+                .verifyComplete();
+    }
 }
