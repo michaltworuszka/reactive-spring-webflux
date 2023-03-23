@@ -240,4 +240,47 @@ class FluxAndMonoGeneratorServiceTest {
                 .expectNext("A", "B")
                 .verifyComplete();
     }
+
+    @Test
+    void exploreMerge() {
+        //given
+
+        //when
+        Flux<String> exploreMerge = fluxAndMonoGeneratorService.exploreMerge();
+
+        //then
+        StepVerifier.create(exploreMerge)
+                .expectSubscription()
+                .expectNext("A", "D", "B", "E", "C", "F")
+                .verifyComplete();
+    }
+
+    @Test
+    void exploreMergeWith() {
+        //given
+
+        //when
+        Flux<String> exploreMergeWith = fluxAndMonoGeneratorService.exploreMergeWith();
+
+        //then
+        StepVerifier.create(exploreMergeWith)
+                .expectSubscription()
+                .expectNext("A", "D", "B", "E", "C", "F")
+                .verifyComplete();
+    }
+
+    @Test
+    void exploreMergeWithMono() {
+
+        //given
+
+        //when
+        Flux<String> exploreMergeWithMono = fluxAndMonoGeneratorService.exploreMergeWithMono();
+
+        //then
+        StepVerifier.create(exploreMergeWithMono)
+                .expectSubscription()
+                .expectNext("A", "D")
+                .verifyComplete();
+    }
 }
